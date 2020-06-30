@@ -1,3 +1,8 @@
+require "pry"
+
+# require "./partner_error.rb"
+
+
 class Person
   attr_accessor :partner, :name
 
@@ -7,15 +12,36 @@ class Person
 
   def get_married(person)
     self.partner = person
-    person.partner = self
+
+    if person.class != Person
+      begin
+        raise PartnerError
+      rescue PartnerError => error
+        puts error.message
+      end
+
+    else
+      person.partner = self
+    end
+  end
+
+  class PartnerError < StandardError
+    def message
+      "you must give the get_married method an argument of an instance of the person class!"
+    end
   end
 
 end
 
 beyonce = Person.new("Beyonce")
+carl = Person.new("Carl")
+# beyonce.get_married(carl)
+puts beyonce.name
+# puts beyonce.partner.name
+
 beyonce.get_married("Jay-Z")
 puts beyonce.name
+puts beyonce.partner
 
-
-
-
+binding.pry
+# Run file code with:       ruby ./lib/custom_errors.rb
